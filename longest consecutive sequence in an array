@@ -1,0 +1,76 @@
+class Solution {
+    /*
+    bool linearSearch(vector<int>& nums, int num) {
+    int n = nums.size(); //size of array
+    for (int i = 0; i < n; i++) {
+        if (nums[i] == num)
+            return true;
+    }
+    return false;
+    }
+    */
+public:
+    int longestConsecutive(vector<int>& nums) {
+        /*
+        // better 
+        // O(n)
+        // O(1)
+        sort(nums.begin(), nums.end());
+        if (nums.empty()) return 0;
+        int l=1;
+        int m=1;
+        for(int i=1;i<nums.size();i++){
+            if (nums[i]==nums[i-1]) continue;
+            else if (nums[i]==nums[i-1]+1) l++;
+            else{
+                m=max(m, l);
+                l=1;
+            }
+        }
+        return max(m, l);
+        */
+        
+        /*
+        // brute
+        // TC : O(n^2)
+        // SC : O(1)
+        int n = nums.size(); 
+        if (n==0) return 0;
+        int longest = 1;
+        for (int i = 0; i < n; i++) {
+            int x = nums[i];
+            int cnt = 1;
+            while (linearSearch(nums, x + 1) == true) {
+                x += 1;
+                cnt += 1;
+            }
+            longest = max(longest, cnt);
+        }
+        return longest;
+        }
+        */
+        
+        // optimal
+        // not sorting it
+        // TC : O(n)+O(2n)
+        // SC : O(n)
+        int n=nums.size();
+        if (n==0) return 0;
+        int longest=1;
+        unordered_set<int> s;
+        for(int i=0;i<n;i++) s.insert(nums[i]);
+        for(int i:s){
+            if (s.find(i-1)==s.end()){
+                int cnt=1;
+                int x=i;
+                while(s.find(x+1)!=s.end()){
+                    cnt++;
+                    x++;
+                }
+                longest=max(longest, cnt);
+            }
+        }
+        return longest;
+        
+    }
+};
