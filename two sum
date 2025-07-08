@@ -1,0 +1,32 @@
+// this question needed index, else we could have used 2 pointer after sorting the array
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        /*
+        // brute force
+        // TC : O(n^2)
+        // SC : O(2)
+        for(int i=0;i<nums.size();i++){
+            for(int j=i+1;j<nums.size();j++){
+                if (nums[i]+nums[j]==target){
+                    return {i, j};
+                }
+            }
+        }
+        return {};
+        */
+        // better 
+        // TC : O(n)
+        // SC : O(n)
+        unordered_map<int, int> m;
+        for(int i=0;i<nums.size();i++){
+            int num=nums[i];
+            int need=target-num;
+            if(m.find(need)!=m.end()){
+                return {m[need], i};
+            }
+            m[num]=i;
+        }
+        return {};
+    }
+};
