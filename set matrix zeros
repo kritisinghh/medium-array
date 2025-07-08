@@ -1,0 +1,115 @@
+finding if first row or column have zero 
+traverse through the matrix, where we get zero let m[i][j], will set the row and cols first element zero (m[i][0] and m[0][j])
+will traverse again through matrix again and the element having either row or cols first element, will set the whole col or row to zero(if m[0][j] or m[i][0] is zero will set m[i][j] for those values)
+
+
+
+ Short Algorithm:
+1. Mark first row/col zero flags**: Check if the first row or first column contains any zeros.
+2. Mark zeroes in first row/col**: For each zero in the matrix (except in the first row/col), mark its corresponding row and column by setting the first element of that row and column to zero.
+3. Set inner matrix zeroes**: Use the markers in the first row and column to set the rest of the matrix elements to zero.
+4. Reset first row/col**: If the first row/column had any zero, set the entire first row/column to zero.
+
+
+class Solution {
+    /*
+    void markRow(int i, int n, vector<vector<int>>& matrix){
+        for(int j=0;j<n;j++){
+            if (matrix[i][j]!=0) matrix[i][j]=-1;
+        }
+    }
+    void markCol(int j, int m, vector<vector<int>>& matrix){
+        for(int i=0;i<m;i++){
+            if (matrix[i][j]!=0) matrix[i][j]=-1;
+        }
+    }
+    */
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        /*
+        // brute
+        // TC : O(n*m)*O(n+m)+O(n*m)
+        // SC : O(1)
+        int m=matrix.size();
+        int n=matrix[0].size();
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if (matrix[i][j]==0){
+                    markRow(i, n, matrix);
+                    markCol(j, m, matrix);
+                }
+            }
+        }
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if (matrix[i][j]==-1) matrix[i][j]=0;
+            }
+        }
+        */
+
+        /*
+        // better
+        // TC : O(n*m)
+        // SC : O(n+m)
+        int m = matrix.size();
+        int n = matrix[0].size();
+        vector<bool> zeroRows(m, false);
+        vector<bool> zeroCols(n, false);
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(matrix[i][j] == 0){
+                    zeroRows[i] = true;
+                    zeroCols[j] = true;
+                }
+            }
+        }
+
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if (zeroCols[j] || zeroRows[i]) matrix[i][j]=0;
+            }
+        }
+        */
+
+        // optimal
+        // TC : O(2*n*m)
+        // SC : O(1)
+        // now, col[0]->zeroCols and row[0]->zeroRows
+
+        // vector<bool> zeroRows(m, false); ->matrix[][0]
+        // vector<bool> zeroCols(n, false); ->matrix[0][]
+        int m = matrix.size();
+        if (m == 0) return;
+        int n = matrix[0].size();
+        bool col0 = false;
+        for (int i = 0; i < m; i++) {
+            if (matrix[i][0] == 0) col0 = true;
+            for (int j = 1; j < n; j++) {
+                if (matrix[i][j] == 0) {
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
+                }
+            }
+        }
+
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        if (matrix[0][0] == 0) {
+            for (int j = 0; j < n; j++) {
+                matrix[0][j] = 0;
+            }
+        }
+
+        if (col0) {
+            for (int i = 0; i < m; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+    }
+};
